@@ -1,11 +1,9 @@
 'use strict';
 
 module.exports = {
-  host: 'localhost',
+  host: 'uat-dandelion-mongodb.svr.tiki.services',
   port: 27017,
-  dbName: 'mongo-express-test-db',
-  makeConnectionUrl: () => {
-    const m = module.exports;
-    return `mongodb://${m.host}:${m.port}/${m.dbName}`;
-  },
+  dbName: 'dandelion_uat',
+  // eslint-disable-next-line max-len
+  makeConnectionUrl: () => 'mongodb://dandelionad:M0n90Bak82F0r3V3r@uat-dandelion-mongodb.svr.tiki.services:27017/dandelion_uat?connect=direct&authSource=admin',
 };

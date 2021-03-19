@@ -2,6 +2,7 @@
 
 'use strict';
 
+require('dotenv').config();
 const clc             = require('cli-color');
 const csrf            = require('csurf');
 const commander       = require('commander');

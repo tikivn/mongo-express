@@ -87,7 +87,9 @@ const sslCAFromEnv = getBinaryFileEnv(sslCA);
 module.exports = {
   mongodb: {
     // if a connection string options such as server/port/etc are ignored
-    connectionString: mongo.connectionString || getConnectionStringFromEnvVariables(),
+    connectionString: process.env.NODE_ENV === 'test'
+      ? 'mongodb://dandelionad:M0n90Bak82F0r3V3r@uat-dandelion-mongodb.svr.tiki.services:27017/dandelion_qas?connect=direct&authSource=admin'
+      : (mongo.connectionString || getConnectionStringFromEnvVariables()),
 
     connectionOptions: {
       // ssl: connect to the server using secure SSL

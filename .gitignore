@@ -33,6 +33,7 @@ _site/
 
 # General
 # =======
+*.env
 *.seed
 *.log
 *.csv
