@@ -1,0 +1,77 @@
+version: '2'
+config:
+  slack_notify: true
+  slack_channel: fna-dandelion-ci
+environment:
+  BUILD_IMAGE: 'maven:3.6-jdk-11'
+jobs:
+  build_docker:
+    steps:
+      - build_image
+  publish_docker:
+    steps:
+      - push_image
+  deploy_dev:
+    steps:
+      - deploy_dev:
+          cluster: dev
+          namespace: operations
+          workload: dandelion-mongo-ui
+          spinnaker_pipeline: generic-v2
+          deployment_config: dev
+  deploy_prod:
+    steps:
+      - deploy_production:
+          cluster: k8s-operations-prod
+          namespace: default
+          workload: dandelion-mongo-ui
+          spinnaker_pipeline: generic-v2
+          deployment_config: prod
+workflows:
+  jenkins_pipeline:
+    jobs:
+      - build_docker:
+          filters:
+            branches:
+              only:
+                - dev
+                - main
+      - publish_docker:
+          requires:
+            - build_docker
+          filters:
+            branches:
+              only:
+                - dev
+                - main
+      - deploy_dev:
+          requires:
+            - publish_docker
+          filters:
+            branches:
+              only:
+                - dev
+      - deploy_prod:
+          requires:
+            - publish_docker
+          filters:
+            branches:
+              only:
+                - main
+deployment_config:
+  dev:
+    ingress:
+      hosts:
+        - host: dandelion-mongo-ui.dev.tiki.services
+          paths:
+            - path: /
+              port: '8081'
+    replicaCount: 1
+  prod:
+    ingress:
+      hosts:
+        - host: dandelion-mongo-ui.tiki.services
+          paths:
+            - path: /
+              port: '8081'
+    replicaCount: 1
