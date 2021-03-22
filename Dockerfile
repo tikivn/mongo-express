@@ -1,6 +1,6 @@
 FROM node:12-slim
 
-RUN apt-get update && apt-get install -y ca-certificates curl \
+RUN apt-get update && apt-get install -y ca-certificates curl git \
 		--no-install-recommends
 
 EXPOSE 8081
